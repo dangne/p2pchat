@@ -48,7 +48,7 @@ public class InputHandler implements Runnable {
                 break;
             }
             case "unfriend": {
-                
+                connection.receiveUnfriend();
                 break;
             }
             // For server connection

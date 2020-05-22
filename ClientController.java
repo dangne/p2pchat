@@ -141,7 +141,17 @@ public class ClientController {
     
     public void removeFriend(String receiver) {
         System.out.println("Removed friend " + receiver);
-        findConnection(receiver).sendMessage("unfriend");
+        Connection connection = findConnection(receiver);
+        connection.sendMessage("unfriend");
+        connection.setState(STRANGER);
+        clientModel.removeFriend(receiver);
+        updateUserListView();
+    }
+    
+    public void receiveUnfriend(String sender) {
+        System.out.println(sender + " removed you from being friend :(");
+        clientModel.removeFriend(sender);
+        updateUserListView();
     }
     
     public String register(String username, String password) {

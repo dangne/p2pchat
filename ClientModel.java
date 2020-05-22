@@ -58,8 +58,28 @@ public class ClientModel {
     }
 
     public void addFriend(String username, String IP, int port) {
+        System.out.println("Adding new friend " + username + " to database");
         friendsList.add(new User(username, IP, port));
         writeFriendsList();
+    }
+    
+    public void removeFriend(String username) {
+        boolean foundFlag = true;
+        
+        System.out.println("Removing friend " + username + " from database");
+        
+        for (int i = 0 ; i < friendsList.size() ; ++i) {
+            if (friendsList.get(i).getUsername().equals(username)) {
+                friendsList.remove(friendsList.get(i));
+                foundFlag = true;
+            }
+        }
+        
+        if (foundFlag) {
+            writeFriendsList();
+        } else {
+            System.out.println("Friend " + username + "not found");
+        }
     }
     
     public void createFriendsList() {

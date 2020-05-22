@@ -152,6 +152,11 @@ public class Connection implements Runnable {
             
         }
     }
+    
+    public void receiveUnfriend() {
+        state = STRANGER;
+        controller.receiveUnfriend(username);
+    }
 
     public String getUsername() {
         return username;
