@@ -38,9 +38,10 @@ public class ClientModel {
     public ClientModel(ClientController controller, String username, int port) {
         this.controller = controller;
         this.username = username;
-        IP = getLocalAddress();
+        this.IP = getLocalAddress();
+        this.port = port;
         
-        FILE_PATH = "FriendsListOfPort" + port + ".xml";
+        FILE_PATH = "FriendsListPort" + port + ".xml";
         
         friendsList = new ArrayList<User>();
         
@@ -53,10 +54,6 @@ public class ClientModel {
         } else {
             System.out.println("FriendsList not exist!");
             createFriendsList();
-        }
-        
-        for (User friend : friendsList) {
-            System.out.println("Username: " + friend.getUsername() + ", IP: " + friend.getIP());
         }
     }
 
@@ -107,6 +104,7 @@ public class ClientModel {
             doc.appendChild(rootElement);
             
             System.out.println("Writing new FriendsList...");
+            
             // Append friend element
             for (User friend : friendsList) {
                 System.out.println("Writing: Username: " + friend.getUsername() + ", IP: " + friend.getIP() + ", Port: " + friend.getPort());
@@ -132,10 +130,13 @@ public class ClientModel {
             System.out.println("Root element: " + doc.getDocumentElement().getNodeName());
             NodeList nodeList = doc.getElementsByTagName("Friend");
             
+            System.out.println("Reading FriendList...");
             System.out.println("Found " + nodeList.getLength() + " friends");
             
             for (int i = 0; i < nodeList.getLength(); i++) {
-                friendsList.add(getUser(nodeList.item(i)));
+                User user = getUser(nodeList.item(i));
+                System.out.println((i+1) + ". Username: " + user.getUsername() + ", IP: " + user.getIP() + ", port: " + user.getPort());
+                friendsList.add(user);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -231,6 +232,14 @@ public class ClientModel {
 
     public void setIP(String IP) {
         this.IP = IP;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public void setIP(int port) {
+        this.port = port;
     }
 
     public ArrayList<User> getFriendsList() {
