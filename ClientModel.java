@@ -205,6 +205,16 @@ public class ClientModel {
 
         return null;
     }
+    
+    public boolean isFriend(String username) {
+        for (User user : friendsList) {
+            if (user.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     public String getUsername() {
         return username;

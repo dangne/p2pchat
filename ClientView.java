@@ -7,6 +7,7 @@ package com.hcmut.demo;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.util.ArrayList;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 
 /**
@@ -19,14 +20,18 @@ public class ClientView extends javax.swing.JFrame {
      * Creates new form ClientView
      */
     public ClientView(ClientController clientController) {
-        
         ADD_FRIEND_ICON = new javax.swing.ImageIcon("/home/dang/Pictures/add_friend.png");
         REMOVE_FRIEND_ICON = new javax.swing.ImageIcon("/home/dang/Pictures/remove_friend.png");
+        
         this.clientController = clientController;
         previousFindText = "";
         previousMessageText = "";
         initComponents();
+        friendListModel = new javax.swing.DefaultListModel<String>();
+        friendList.setModel(friendListModel);
         friendList.setSelectedIndex(0);
+        strangerListModel = new javax.swing.DefaultListModel<String>();
+        strangerList.setModel(strangerListModel);
         strangerList.setSelectedIndex(0);
         updateSelectedUser();
     }
@@ -303,19 +308,53 @@ public class ClientView extends javax.swing.JFrame {
         updateSelectedUser();
     }//GEN-LAST:event_strangerListMouseReleased
 
+    public void appendChatArea(String message) {
+        chatTextArea.append(message);
+    }
+    
+    public void updateChatArea(ArrayList<String> chatData) {
+        chatTextArea.removeAll();
+        for (String message : chatData) {
+            chatTextArea.append(message);
+        }
+    }
+    
+    public void updateUserList(ArrayList<String> strangerList, ArrayList<String> friendList) {
+        strangerListModel.removeAllElements();
+        friendListModel.removeAllElements();
+        
+        for (String stranger : strangerList) {
+            strangerListModel.addElement(stranger);
+        }
+        
+        for (String friend : friendList) {
+            friendListModel.addElement(friend);
+        }
+        
+        updateSelectedUser();
+    }
+    
     private void updateSelectedUser() {
         if (userTabbedPane.getSelectedIndex() == FRIENDS_TAB) {
+            if (friendList.getSelectedValue() == null) {
+                friendList.setSelectedIndex(0);
+            }
+            
             selectedUser = friendList.getSelectedValue();
         }
         
         if (userTabbedPane.getSelectedIndex() == STRANGERS_TAB) {
+            if (strangerList.getSelectedValue() == null) {
+                strangerList.setSelectedIndex(0);
+            }
+            
             selectedUser = strangerList.getSelectedValue();
         }
         
         nameLabel.setText(selectedUser);
         //clientController.reloadChatData(selectedUser);
     }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -373,6 +412,7 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JTextArea chatTextArea;
     private javax.swing.JFileChooser fileChooser;
     private javax.swing.JButton friendButton;
+    private javax.swing.DefaultListModel<String> friendListModel;
     private javax.swing.JList<String> friendList;
     private javax.swing.JScrollPane friendListScroll;
     private javax.swing.JPanel headerPanel;
@@ -382,6 +422,7 @@ public class ClientView extends javax.swing.JFrame {
     private javax.swing.JButton sendFileButton;
     private javax.swing.JButton sendMessageButton;
     private javax.swing.JLabel statusLabel;
+    private javax.swing.DefaultListModel<String> strangerListModel;
     private javax.swing.JList<String> strangerList;
     private javax.swing.JScrollPane strangerListScroll;
     private javax.swing.JPanel userPanel;

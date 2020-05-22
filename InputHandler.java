@@ -31,25 +31,38 @@ public class InputHandler implements Runnable {
 
         switch (parts[0]) {
             // For client connection
-            case "message":
+            case "init": {
+                String[] data = parts[1].split(" ");
+                
+                connection.setUsername(data[0]);
+                connection.setIP(data[1]);
+                connection.setPort(Integer.parseInt(data[2]));
+                controller.updateUserListView();
+                break;}
+            case "message": {
                 connection.receiveMessage(parts[1]);
+                break;}
+            case "friend": {
+                controller.receiveFriendRequest(connection.getUsername());
                 break;
+            }
+            case "unfriend": {
+                
+                break;
+            }
             // For server connection
-            case "add":
+            case "add": {
                 String[] data = parts[1].split(" ");
                 controller.addConnection(data[0], data[1], Integer.parseInt(data[2]));
-                break;
-            case "remove":
-                controller.removeConnection(parts[1]);
-                break;
-            case "done":
-                controller.setDoneFlag(true);
-                break;
-            case "invalid":
-                break;
-            default: 
+                controller.updateUserListView();
+                break;}
+            case "done": {
+                break;}
+            case "invalid": {
+                break;}
+            default: { 
                 connection.sendMessage("invalid");
-                break;
+                break;}
         }
     }
 
@@ -58,7 +71,8 @@ public class InputHandler implements Runnable {
         try {
             while (true) {
                 String message = input.readUTF();
-                System.out.println("Received message from " + connection.getUsername() + ":" + message);
+                System.out.println("Received message from " + connection.getUsername() + ": " + message);
+                connection.log(message);
                 parseMessage(message);
             }
         } catch (EOFException eof) {

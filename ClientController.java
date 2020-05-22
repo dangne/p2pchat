@@ -24,9 +24,6 @@ public class ClientController {
     private static Listener listener;
     private ArrayList<Connection> clientConnections;
     private static Connection serverConnection;
-    private String username;
-    private String IP;
-    private static boolean doneFlag = false;
 
     public ClientController() {
         clientView = new ClientView(this);
@@ -35,29 +32,20 @@ public class ClientController {
         listener = new Listener(this);
         
         // Create Model
-        clientModel = new ClientModel(this, "Dang", listener.getPort());
+        clientModel = new ClientModel(this, "Dang" + listener.getPort(), listener.getPort());
 
         // Init empty connections list
         clientConnections = new ArrayList<Connection>();
         
         // Connect to server
         serverConnection = new Connection(this, SERVER_IP, SERVER_PORT);
-//
-//        // Set done flag value
-//        doneFlag = true;
-    }
-
-    public void reloadChatData(String username) {
-        reloadChatData(findConnection(username).getChatData());
+        
+        // Set view title
+        clientView.setTitle(getUsername());
     }
     
-    public void reloadChatData(ArrayList<String> chatData) {
-        // TODO: clear view's current chat
-        // TODO: reload new chat data
-    }
-    
-    public void enableView() {
-        clientView.setVisible(true);
+    public void updateChatArea(ArrayList<String> chatData) {
+        clientView.updateChatArea(chatData);
     }
     
     public Connection findConnection(String username) {
@@ -77,8 +65,7 @@ public class ClientController {
 
     public void addConnection(String username, String IP, int port) {
         System.out.println("Adding new connection: Username: " + username + ", IP: " + IP + ", Port:" + port);
-        clientConnections.add(new Connection(this, username, IP, port));
-        clientModel.addFriend(username, IP, port);
+        clientConnections.add(new Connection(this, username, IP, port));      
     }
 
     public void removeConnection(Connection connection) {
@@ -92,6 +79,21 @@ public class ClientController {
     public void removeConnection(String data) {
         String username = data.split(" ")[0];
         clientConnections.remove(findConnection(username));
+    }
+    
+    public void updateUserListView() {        
+        ArrayList<String> strangersList = new ArrayList<String>();
+        ArrayList<String> friendsList = new ArrayList<String>();
+        
+        for (Connection c : clientConnections) {
+            if (clientModel.isFriend(c.getUsername())) {
+                friendsList.add(c.getUsername());
+            } else {
+                strangersList.add(c.getUsername());
+            }
+        }
+        
+        clientView.updateUserList(strangersList, friendsList);  
     }
 
     public void sendMessage(String receiver, String message) {
@@ -108,20 +110,18 @@ public class ClientController {
     
     public void sendFriendRequest(String receiver) {
         System.out.println("Request sent to " + receiver);
+        findConnection(receiver).sendMessage("friend");
+    }
+    
+    public void receiveFriendRequest(String sender) {
+        System.out.println("");
     }
     
     public void removeFriend(String receiver) {
         System.out.println("Removed friend " + receiver);
+        findConnection(receiver).sendMessage("unfriend");
     }
     
-    private void getUserListFromServer() {
-        serverConnection.sendMessage("getuserlist");
-    }
-
-    public void setDoneFlag(boolean doneFlag) {
-        this.doneFlag = doneFlag;
-    }
-
     public String register(String username, String password) {
         // Return status as string
         return null;
@@ -132,12 +132,20 @@ public class ClientController {
         return null;
     }
 
+    public String getUsername() {
+        return clientModel.getUsername();
+    }
+    
+    public String getIP() {
+        return clientModel.getIP();
+    }
+    
+    public int getPort() {
+        return listener.getPort();
+    }
+    
     public static void main(String[] args) {
         ClientController client = new ClientController();
-//        while (!doneFlag) {}
-        client.sendMessage(serverConnection, "init " + clientModel.getUsername() + " " + clientModel.getIP() + " " + listener.getPort());
-        client.getUserListFromServer();
-//        while (!doneFlag) {}
-        client.enableView();
+        clientView.setVisible(true);
     }
 }
