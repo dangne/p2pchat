@@ -37,13 +37,14 @@ public class InputHandler implements Runnable {
                 connection.setUsername(data[0]);
                 connection.setIP(data[1]);
                 connection.setPort(Integer.parseInt(data[2]));
+                connection.submitConnection();
                 controller.updateUserListView();
                 break;}
             case "message": {
                 connection.receiveMessage(parts[1]);
                 break;}
             case "friend": {
-                controller.receiveFriendRequest(connection.getUsername());
+                connection.receiveFriendRequest();
                 break;
             }
             case "unfriend": {
@@ -60,7 +61,7 @@ public class InputHandler implements Runnable {
                 break;}
             case "invalid": {
                 break;}
-            default: { 
+            default: {
                 connection.sendMessage("invalid");
                 break;}
         }
@@ -72,7 +73,7 @@ public class InputHandler implements Runnable {
             while (true) {
                 String message = input.readUTF();
                 System.out.println("Received message from " + connection.getUsername() + ": " + message);
-                connection.log(message);
+//                connection.log(message);
                 parseMessage(message);
             }
         } catch (EOFException eof) {

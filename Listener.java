@@ -46,7 +46,7 @@ public class Listener implements Runnable {
             while(true) {
                 connection = new Connection(controller, listener.accept());
                 System.out.println("Listener: " + "New connection established");
-                controller.addConnection(connection);
+                controller.addConnectionBuffer(connection);
             }
         } catch (IOException e) {
             e.printStackTrace();

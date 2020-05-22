@@ -105,21 +105,52 @@ public class Connection implements Runnable {
         try { output = new DataOutputStream(s.getOutputStream()); }
         catch (IOException e) { e.printStackTrace(); }
     }
-
+    
+    public void submitConnection() {
+        controller.addConnection(this);
+    }
+    
     public void log(String message) {
         log.add(message);
     }
     
     public void receiveMessage(String message) {
         chatData.add(message);
-        controller.reloadChatData(username);
+        controller.updateChatArea(chatData);
     }
     
     public void sendMessage(String message) {
         System.out.println("Sending message to " + username + ": " + message);
-        chatData.add(message);
+        String[] parts = message.split(" ", 2);
+        if (parts[0].equals("message")) chatData.add(parts[1]);
         try { output.writeUTF(message); }
         catch (IOException e) { e.printStackTrace(); }
+        controller.updateChatArea(chatData);
+    }
+    
+    public void sendFriendRequest() {
+        if (state == STRANGER) {
+            System.out.println("Connection with " + username + " changed to: PENDING");
+            state = PENDING;
+        } else if (state == PENDING) {
+            System.out.println("Connection with " + username + " changed to: FRIEND");
+            state = FRIEND;
+            controller.newFriend(username, IP, port);
+        } else if (state == FRIEND) {
+        }
+        
+        sendMessage("friend");
+    }
+    
+    public void receiveFriendRequest() {
+        if (state == STRANGER) {
+            state = PENDING;
+        } else if (state == PENDING) {
+            state = FRIEND;
+            controller.newFriend(username, IP, port);
+        } else if (state == FRIEND) {
+            
+        }
     }
 
     public String getUsername() {
@@ -148,6 +179,14 @@ public class Connection implements Runnable {
 
     public boolean getType() {
         return type;
+    }
+    
+    public int getState() {
+        return state;
+    }
+    
+    public void setState(int state) {
+        this.state = state;
     }
 
     public ArrayList<String> getChatData() {

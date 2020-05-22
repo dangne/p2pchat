@@ -308,10 +308,14 @@ public class ClientView extends javax.swing.JFrame {
         updateSelectedUser();
     }//GEN-LAST:event_strangerListMouseReleased
     
+    public String getSelectedUser() {
+        return selectedUser;
+    }
+    
     public void updateChatArea(ArrayList<String> chatData) {
-        chatTextArea.removeAll();
+        chatTextArea.setText("");
         for (String message : chatData) {
-            chatTextArea.append(message);
+            chatTextArea.append(message + "\n");
         }
     }
     

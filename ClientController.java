@@ -19,10 +19,14 @@ import java.util.Scanner;
 public class ClientController {
     private final String SERVER_IP = "35.186.152.171";
     private final int SERVER_PORT = 3000;
+    private final int FRIEND = 0;
+    private final int STRANGER = 1;
+    private final int PENDING = 2;
     private static ClientView clientView;
     private static ClientModel clientModel;
     private static Listener listener;
     private ArrayList<Connection> clientConnections;
+    private ArrayList<Connection> clientConnectionsBuffer; // For connections that have not yet init
     private static Connection serverConnection;
 
     public ClientController() {
@@ -58,14 +62,31 @@ public class ClientController {
         return null;
     }
 
+    public void addConnectionBuffer(Connection connection) {
+        clientConnectionsBuffer.add(connection);
+    }
+    
     public void addConnection(Connection connection) {
         System.out.println("Adding new connection: Username: " + connection.getUsername() + ", IP: " + connection.getIP() + ", Port: " + connection.getPort());
         clientConnections.add(connection);
+        
+        if (clientModel.isFriend(connection.getUsername())) {
+            connection.setState(FRIEND);
+        } else {            
+            connection.setState(STRANGER);
+        }
     }
-
+    
     public void addConnection(String username, String IP, int port) {
         System.out.println("Adding new connection: Username: " + username + ", IP: " + IP + ", Port:" + port);
-        clientConnections.add(new Connection(this, username, IP, port));      
+        Connection connection = new Connection(this, username, IP, port);
+        clientConnections.add(connection);
+        
+        if (clientModel.isFriend(connection.getUsername())) {
+            connection.setState(FRIEND);
+        } else {            
+            connection.setState(STRANGER);
+        }
     }
 
     public void removeConnection(Connection connection) {
@@ -86,7 +107,7 @@ public class ClientController {
         ArrayList<String> friendsList = new ArrayList<String>();
         
         for (Connection c : clientConnections) {
-            if (clientModel.isFriend(c.getUsername())) {
+            if (c.getState() == FRIEND) {
                 friendsList.add(c.getUsername());
             } else {
                 strangersList.add(c.getUsername());
@@ -97,11 +118,11 @@ public class ClientController {
     }
 
     public void sendMessage(String receiver, String message) {
-        findConnection(receiver).sendMessage(message);
+        findConnection(receiver).sendMessage("message " + message);
     }
     
     public void sendMessage(Connection receiver, String message) {
-        receiver.sendMessage(message);
+        receiver.sendMessage("message " + message);
     }
     
     public void sendFile(String receiver, File file) {
@@ -110,12 +131,13 @@ public class ClientController {
     
     public void sendFriendRequest(String receiver) {
         System.out.println("Request sent to " + receiver);
-        findConnection(receiver).sendMessage("friend");
+        findConnection(receiver).sendFriendRequest();
     }
     
-    public void receiveFriendRequest(String sender) {
-        System.out.println(""); 
-   }
+    public void newFriend(String username, String IP, int port) {
+        clientModel.addFriend(username, IP, port);
+        updateUserListView();
+    }
     
     public void removeFriend(String receiver) {
         System.out.println("Removed friend " + receiver);
