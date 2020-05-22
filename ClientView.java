@@ -352,7 +352,7 @@ public class ClientView extends javax.swing.JFrame {
         }
         
         nameLabel.setText(selectedUser);
-        //clientController.reloadChatData(selectedUser);
+        if (selectedUser != null) updateChatArea(clientController.getChatData(selectedUser));
     }
     
     /**

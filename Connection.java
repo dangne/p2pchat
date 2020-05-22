@@ -116,7 +116,7 @@ public class Connection implements Runnable {
     
     public void receiveMessage(String message) {
         chatData.add(message);
-        controller.updateChatArea(chatData);
+        if (controller.getSelectedUser().equals(username)) controller.updateChatArea(chatData);
     }
     
     public void sendMessage(String message) {
@@ -157,6 +157,11 @@ public class Connection implements Runnable {
         state = STRANGER;
         controller.receiveUnfriend(username);
     }
+    
+    public void close() {
+        System.out.println(username + " has left the chat");
+        controller.removeConnection(this);
+    }
 
     public String getUsername() {
         return username;
@@ -196,10 +201,6 @@ public class Connection implements Runnable {
 
     public ArrayList<String> getChatData() {
         return chatData;
-    }
-    
-    public void close() {
-        System.out.println(username + " has left the chat");
     }
 
     @Override

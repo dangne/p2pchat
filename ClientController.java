@@ -39,6 +39,7 @@ public class ClientController {
         clientModel = new ClientModel(this, "Dang" + listener.getPort(), listener.getPort());
 
         // Init empty connections list
+        clientConnectionsBuffer = new ArrayList<Connection>();
         clientConnections = new ArrayList<Connection>();
         
         // Connect to server
@@ -91,15 +92,7 @@ public class ClientController {
 
     public void removeConnection(Connection connection) {
         clientConnections.remove(connection);
-    }
-
-    public void removeConnection(String username, String IP) {
-        clientConnections.remove(findConnection(username));
-    }
-
-    public void removeConnection(String data) {
-        String username = data.split(" ")[0];
-        clientConnections.remove(findConnection(username));
+        updateUserListView();
     }
     
     public void updateUserListView() {        
@@ -174,6 +167,18 @@ public class ClientController {
     
     public int getPort() {
         return listener.getPort();
+    }
+    
+    public String getSelectedUser() {
+        return clientView.getSelectedUser();
+    }
+    
+    public ArrayList<String> getChatData(String username) {
+        Connection connection = findConnection(username);
+        if (connection != null) {
+            return connection.getChatData();
+        } 
+        return null;
     }
     
     public static void main(String[] args) {
