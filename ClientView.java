@@ -307,10 +307,6 @@ public class ClientView extends javax.swing.JFrame {
     private void strangerListMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_strangerListMouseReleased
         updateSelectedUser();
     }//GEN-LAST:event_strangerListMouseReleased
-
-    public void appendChatArea(String message) {
-        chatTextArea.append(message);
-    }
     
     public void updateChatArea(ArrayList<String> chatData) {
         chatTextArea.removeAll();

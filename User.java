@@ -5,8 +5,6 @@
  */
 package com.hcmut.demo;
 
-import java.net.Socket;
-
 /**
  *
  * @author dang
@@ -15,13 +13,11 @@ public class User{
     private String username;
     private String IP;
     private int port;
-    private boolean isFriend;
     
-    public User(String username, String IP, int port, boolean isFriend) {
+    public User(String username, String IP, int port) {
         this.username = username;
         this.IP = IP;
         this.port = port;
-        this.isFriend = isFriend;
     }
 
     public String getUsername() {
@@ -46,13 +42,5 @@ public class User{
     
     public void setPort(int port) {
         this.port = port;
-    }
-    
-    public void setIsFriend(boolean isFriend) {
-        this.isFriend = isFriend;
-    }
-    
-    public boolean isFriend() {
-        return isFriend;
     }
 }

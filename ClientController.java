@@ -114,8 +114,8 @@ public class ClientController {
     }
     
     public void receiveFriendRequest(String sender) {
-        System.out.println("");
-    }
+        System.out.println(""); 
+   }
     
     public void removeFriend(String receiver) {
         System.out.println("Removed friend " + receiver);

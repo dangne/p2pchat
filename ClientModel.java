@@ -32,6 +32,7 @@ public class ClientModel {
     private ClientController controller;
     private String username;
     private String IP;
+    private int port;
     private ArrayList<User> friendsList;
 
     public ClientModel(ClientController controller, String username, int port) {
@@ -60,7 +61,7 @@ public class ClientModel {
     }
 
     public void addFriend(String username, String IP, int port) {
-        friendsList.add(new User(username, IP, port, true));
+        friendsList.add(new User(username, IP, port));
         writeFriendsList();
     }
     
@@ -172,7 +173,7 @@ public class ClientModel {
             username = getTagValue("Username", element);
             IP = getTagValue("IP", element);
             port = Integer.parseInt(getTagValue("Port", element));
-            return new User(username, IP, port, true);
+            return new User(username, IP, port);
         }
         return null;
     }
