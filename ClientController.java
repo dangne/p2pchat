@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hcmut.demo;
+//package com.hcmut.demo;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,11 +17,14 @@ import java.util.Scanner;
  * @author dang
  */
 public class ClientController {
-    private final String SERVER_IP = "35.186.152.171";
-    private final int SERVER_PORT = 3000;
+    //private final String SERVER_IP = "35.186.152.171";
+    //private final int SERVER_PORT = 3000;
     private final int FRIEND = 0;
     private final int STRANGER = 1;
     private final int PENDING = 2;
+    private String serverIP;
+    private int serverPort;
+    private int port;
     private static ClientView clientView;
     private static ClientModel clientModel;
     private static Listener listener;
@@ -30,23 +33,39 @@ public class ClientController {
     private static Connection serverConnection;
 
     public ClientController() {
+        new LoginView(this).setVisible(true);
+    }
+
+    public void initComponents(String username, int port, String msg) {
         clientView = new ClientView(this);
         
         // Create listener
-        listener = new Listener(this);
+        listener = new Listener(this, port);
         
         // Create Model
-        clientModel = new ClientModel(this, "Dang" + listener.getPort(), listener.getPort());
+        clientModel = new ClientModel(this, username, port);
 
         // Init empty connections list
         clientConnectionsBuffer = new ArrayList<Connection>();
         clientConnections = new ArrayList<Connection>();
         
         // Connect to server
-        serverConnection = new Connection(this, SERVER_IP, SERVER_PORT);
+        serverConnection = new Connection(this, serverIP, serverPort);
         
         // Set view title
         clientView.setTitle(getUsername());
+        clientView.setVisible(true);
+    }
+
+    public void onLoginSuccess(String serverIP, int serverPort, int portPeer, String username, String msg) {
+        this.serverIP = serverIP.substring(1);
+        this.serverPort = serverPort;
+        System.out.println("serverIP " + this.serverIP);
+        System.out.println("serverPort " + serverPort);
+        System.out.println("portPeer " + portPeer);
+        System.out.println("username " + username);
+        System.out.println("msg " + msg);
+        initComponents(username, portPeer, msg);
     }
     
     public void updateChatArea(ArrayList<String> chatData) {
@@ -183,6 +202,6 @@ public class ClientController {
     
     public static void main(String[] args) {
         ClientController client = new ClientController();
-        clientView.setVisible(true);
+        //clientView.setVisible(true);
     }
 }

@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hcmut.demo;
+//package com.hcmut.demo;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -54,7 +55,7 @@ public class Connection implements Runnable {
             sendMessage("getuserlist");
         }
         catch (IOException e) { 
-            System.out.println("Connect to " + controller.getUsername() + " failed");
+            System.out.println("Connect to " + username + " failed");
         }
     }
     
@@ -114,11 +115,6 @@ public class Connection implements Runnable {
         log.add(message);
     }
     
-    public void receiveMessage(String message) {
-        chatData.add(message);
-        if (controller.getSelectedUser().equals(username)) controller.updateChatArea(chatData);
-    }
-    
     public void sendMessage(String message) {
         System.out.println("Sending message to " + username + ": " + message);
         String[] parts = message.split(" ", 2);
@@ -128,7 +124,23 @@ public class Connection implements Runnable {
         controller.updateChatArea(chatData);
     }
     
+    public void receiveMessage(String message) {
+        chatData.add(message);
+        if (controller.getSelectedUser().equals(username)) controller.updateChatArea(chatData);
+    }
+    
+    public void sendFile(File file) {
+        
+    }
+    
+    public void receiveFile(File file) {
+        
+    }
+    
     public void sendFriendRequest() {
+        // BUG: Client can cheat by click add friend twice!!!
+        
+        
         if (state == STRANGER) {
             System.out.println("Connection with " + username + " changed to: PENDING");
             state = PENDING;
