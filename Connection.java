@@ -48,11 +48,6 @@ public class Connection implements Runnable {
             s = new Socket(IP, port);
             
             initialize(this.type);
-            
-            // Send init request
-            sendMessage("init " + controller.getUsername() + " " + controller.getIP() + " " + controller.getPort());
-            
-            sendMessage("getuserlist");
         }
         catch (IOException e) { 
             System.out.println("Connect to " + username + " failed");

@@ -206,7 +206,7 @@ public class Server {
 		Users newPeer = new Users();
 		if (OnlUser.size() == 0)
 			OnlUser = new ArrayList<Users>();
-		newPeer.setUserPeer(username, ipAddress, port);
+		newPeer.setUserPeer(username, ipAddress.substring(1), port);
 		OnlUser.add(newPeer);
 	}
 

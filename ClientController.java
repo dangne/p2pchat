@@ -36,6 +36,17 @@ public class ClientController {
         new LoginView(this).setVisible(true);
     }
 
+    public void onLoginSuccess(String serverIP, int serverPort, int portPeer, String username, String msg) {
+        this.serverIP = serverIP.substring(1);
+        this.serverPort = serverPort;
+        System.out.println("serverIP " + this.serverIP);
+        System.out.println("serverPort " + serverPort);
+        System.out.println("portPeer " + portPeer);
+        System.out.println("username " + username);
+        System.out.println("msg " + msg);
+        initComponents(username, portPeer, msg);
+    }
+
     public void initComponents(String username, int port, String msg) {
         clientView = new ClientView(this);
         
@@ -51,21 +62,14 @@ public class ClientController {
         
         // Connect to server
         serverConnection = new Connection(this, serverIP, serverPort);
+
+        // Connect to other clients in the network
+        String[] parts = msg.split(" ");
+        
         
         // Set view title
         clientView.setTitle(getUsername());
         clientView.setVisible(true);
-    }
-
-    public void onLoginSuccess(String serverIP, int serverPort, int portPeer, String username, String msg) {
-        this.serverIP = serverIP.substring(1);
-        this.serverPort = serverPort;
-        System.out.println("serverIP " + this.serverIP);
-        System.out.println("serverPort " + serverPort);
-        System.out.println("portPeer " + portPeer);
-        System.out.println("username " + username);
-        System.out.println("msg " + msg);
-        initComponents(username, portPeer, msg);
     }
     
     public void updateChatArea(ArrayList<String> chatData) {
@@ -202,6 +206,5 @@ public class ClientController {
     
     public static void main(String[] args) {
         ClientController client = new ClientController();
-        //clientView.setVisible(true);
     }
 }

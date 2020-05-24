@@ -41,7 +41,7 @@ public class ClientModel {
         this.IP = getLocalAddress();
         this.port = port;
         
-        FILE_PATH = "FriendsListPort" + port + ".xml";
+        FILE_PATH = "FriendsListOf" + username + ".xml";
         
         friendsList = new ArrayList<User>();
         
