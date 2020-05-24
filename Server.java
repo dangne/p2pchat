@@ -1,6 +1,7 @@
 //package Server;
 
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -79,7 +80,7 @@ public class Server {
 			try {
 				DataInputStream in = new DataInputStream(client.getInputStream());
 				while (true) {
-					String msg = in.readUTF();
+                    String msg = in.readUTF();
 				}		
 			} catch (EOFException e) {
 				for (int i = 0; i < OnlUser.size(); i++) {

@@ -21,7 +21,8 @@ public class ClientController {
     //private final int SERVER_PORT = 3000;
     private final int FRIEND = 0;
     private final int STRANGER = 1;
-    private final int PENDING = 2;
+    private final int SENT = 2;
+    private final int RECEIVED = 3; 
     private String serverIP;
     private int serverPort;
     private int port;
@@ -170,10 +171,11 @@ public class ClientController {
         connection.setState(STRANGER);
         clientModel.removeFriend(receiver);
         updateUserListView();
+        connection.appendChatData("You two are no longer friends");
     }
     
     public void receiveUnfriend(String sender) {
-        System.out.println(sender + " removed you from being friend :(");
+        findConnection(sender).appendChatData(sender + " removed you from being friend :(");
         clientModel.removeFriend(sender);
         updateUserListView();
     }

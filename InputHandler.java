@@ -40,6 +40,10 @@ public class InputHandler implements Runnable {
                 connection.submitConnection();
                 controller.updateUserListView();
                 break;}
+            case "UPDATE": {
+                //connection.sendMessage("YES");
+                break;
+            }
             case "message": {
                 connection.receiveMessage(parts[1]);
                 break;}

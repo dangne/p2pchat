@@ -23,7 +23,8 @@ public class Connection implements Runnable {
     private final boolean CLIENT = false;
     private final int FRIEND = 0;
     private final int STRANGER = 1;
-    private final int PENDING = 2;
+    private final int SENT = 2;
+    private final int RECEIVED = 3; 
     private Socket s;
     private ClientController controller;
     private String username;
@@ -109,20 +110,25 @@ public class Connection implements Runnable {
     public void log(String message) {
         log.add(message);
     }
+
+    public void appendChatData(String message) {
+        chatData.add(message);
+        String selectedUser = controller.getSelectedUser();
+        if (selectedUser != null && selectedUser == username) controller.updateChatArea(chatData);
+    }
     
     public void sendMessage(String message) {
         System.out.println("Sending message to " + username + ": " + message);
         String[] parts = message.split(" ", 2);
-        if (parts[0].equals("message")) chatData.add(parts[1]);
+        if (parts[0].equals("message")) {
+            appendChatData(controller.getUsername() + ": " + parts[1]);
+        }
         try { output.writeUTF(message); }
         catch (IOException e) { e.printStackTrace(); }
-        controller.updateChatArea(chatData);
     }
     
     public void receiveMessage(String message) {
-        chatData.add(message);
-        String selectedUser = controller.getSelectedUser();
-        if (selectedUser != null && selectedUser == username) controller.updateChatArea(chatData);
+        appendChatData(username + ": " + message);
     }
     
     public void sendFile(File file) {
@@ -134,31 +140,35 @@ public class Connection implements Runnable {
     }
     
     public void sendFriendRequest() {
-        // BUG: Client can cheat by click add friend twice!!!
-        
-        
         if (state == STRANGER) {
-            System.out.println("Connection with " + username + " changed to: PENDING");
-            state = PENDING;
-        } else if (state == PENDING) {
-            System.out.println("Connection with " + username + " changed to: FRIEND");
+            state = SENT;
+            appendChatData("Friend request sent");
+        } else if (state == SENT) {
+            appendChatData("Request already sent");
+        } else if (state == RECEIVED) {
             state = FRIEND;
             controller.newFriend(username, IP, port);
+            appendChatData("You two are now friends");
         } else if (state == FRIEND) {
         }
         
+        System.out.println("Sent friend request. State: " + state);
         sendMessage("friend");
     }
     
     public void receiveFriendRequest() {
         if (state == STRANGER) {
-            state = PENDING;
-        } else if (state == PENDING) {
+            state = RECEIVED;
+            appendChatData("Received friend request");
+        } else if (state == SENT) {
             state = FRIEND;
             controller.newFriend(username, IP, port);
+            appendChatData("You two are now friends");
+        } else if (state == RECEIVED) {
         } else if (state == FRIEND) {
             
         }
+        System.out.println("Received friend request. State: " + state);
     }
     
     public void receiveUnfriend() {
