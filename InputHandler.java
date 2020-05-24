@@ -52,13 +52,6 @@ public class InputHandler implements Runnable {
                 break;
             }
             // For server connection
-            case "add": {
-                String[] data = parts[1].split(" ");
-                controller.addConnection(data[0], data[1], Integer.parseInt(data[2]));
-                controller.updateUserListView();
-                break;}
-            case "done": {
-                break;}
             case "invalid": {
                 break;}
             default: {

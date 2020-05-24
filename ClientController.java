@@ -66,6 +66,12 @@ public class ClientController {
         // Connect to other clients in the network
         String[] parts = msg.split(" ");
         
+        for (int i = 0 ; i < parts.length ; i += 3) {
+            if (parts[i].equals(username)) continue;
+            addConnection(parts[i], parts[i+1], Integer.parseInt(parts[i+2]));
+        }
+
+        updateUserListView();
         
         // Set view title
         clientView.setTitle(getUsername());
@@ -90,6 +96,7 @@ public class ClientController {
         clientConnectionsBuffer.add(connection);
     }
     
+    // Adding connection method for listener
     public void addConnection(Connection connection) {
         System.out.println("Adding new connection: Username: " + connection.getUsername() + ", IP: " + connection.getIP() + ", Port: " + connection.getPort());
         clientConnections.add(connection);
@@ -101,6 +108,7 @@ public class ClientController {
         }
     }
     
+    // Adding connection method for others 
     public void addConnection(String username, String IP, int port) {
         System.out.println("Adding new connection: Username: " + username + ", IP: " + IP + ", Port:" + port);
         Connection connection = new Connection(this, username, IP, port);

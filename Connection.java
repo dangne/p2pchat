@@ -121,7 +121,8 @@ public class Connection implements Runnable {
     
     public void receiveMessage(String message) {
         chatData.add(message);
-        if (controller.getSelectedUser().equals(username)) controller.updateChatArea(chatData);
+        String selectedUser = controller.getSelectedUser();
+        if (selectedUser != null && selectedUser == username) controller.updateChatArea(chatData);
     }
     
     public void sendFile(File file) {
