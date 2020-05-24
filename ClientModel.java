@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hcmut.demo;
+//package com.hcmut.demo;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -41,7 +41,7 @@ public class ClientModel {
         this.IP = getLocalAddress();
         this.port = port;
         
-        FILE_PATH = "FriendsListPort" + port + ".xml";
+        FILE_PATH = "FriendsListOf" + username + ".xml";
         
         friendsList = new ArrayList<User>();
         

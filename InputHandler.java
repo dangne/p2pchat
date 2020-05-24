@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hcmut.demo;
+//package com.hcmut.demo;
 
 import java.io.DataInputStream;
 import java.io.EOFException;
@@ -40,6 +40,10 @@ public class InputHandler implements Runnable {
                 connection.submitConnection();
                 controller.updateUserListView();
                 break;}
+            case "UPDATE": {
+                //connection.sendMessage("YES");
+                break;
+            }
             case "message": {
                 connection.receiveMessage(parts[1]);
                 break;}
@@ -52,13 +56,6 @@ public class InputHandler implements Runnable {
                 break;
             }
             // For server connection
-            case "add": {
-                String[] data = parts[1].split(" ");
-                controller.addConnection(data[0], data[1], Integer.parseInt(data[2]));
-                controller.updateUserListView();
-                break;}
-            case "done": {
-                break;}
             case "invalid": {
                 break;}
             default: {

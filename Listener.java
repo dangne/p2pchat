@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hcmut.demo;
+//package com.hcmut.demo;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -19,16 +19,13 @@ public class Listener implements Runnable {
     private ServerSocket listener;
     private int port;
 
-    public Listener(ClientController controller) {
+    public Listener(ClientController controller, int port) {
         this.controller = controller;
+        this.port = port;
         
         try {
-            System.out.println("Input port to listen to: ");
-            port = new Scanner(System.in).nextInt();
             listener = new ServerSocket(port);
             new Thread(this).start();
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid number format");
         } catch (IOException e) {
             e.printStackTrace();
         }
