@@ -43,4 +43,8 @@ public class User{
     public void setPort(int port) {
         this.port = port;
     }
+
+    public String toString() {
+        return "User [Username=" + username + ", Port=" + port + ", IPaddress=" + IP + "]";
+    }
 }

@@ -11,12 +11,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-//import Data.Database;
-//import Data.Users;
-
 public class Server {
 
-	private static ArrayList<Users> OnlUser = null;
+	private static ArrayList<User> OnlUser = null;
 	private ServerSocket server = null;
 	private Socket socket = null; // connection
 	private ObjectInputStream objectInputStream = null; // obInputStream
@@ -34,7 +31,7 @@ public class Server {
 		} catch (IOException ioe) {
 			ServerView.updateMessage("\nCan not start sever " + port + ": " + ioe.getMessage());
 		}
-		OnlUser = new ArrayList<Users>();
+		OnlUser = new ArrayList<User>();
 		(new WaitForConnect()).start();
 	}
 
@@ -84,7 +81,7 @@ public class Server {
 				}		
 			} catch (EOFException e) {
 				for (int i = 0; i < OnlUser.size(); i++) {
-					if (client.getInetAddress().toString().equals(OnlUser.get(i).getIPaddress())) {
+					if (client.getInetAddress().toString().equals(OnlUser.get(i).getIP())) {
 						ServerView.updateMessage(OnlUser.get(i).getUsername() + " exit");
 						OnlUser.remove(i);
 					}
@@ -132,8 +129,8 @@ public class Server {
 				int size = OnlUser.size();
 				String type_req = getData[0];
 				if (type_req.equals("EXIT")) {
-					for (Users user : OnlUser) {
-						if (socket.getInetAddress().toString().equals(user.getIPaddress())) {
+					for (User user : OnlUser) {
+						if (socket.getInetAddress().toString().equals(user.getIP())) {
 							OnlUser.remove(user);
 						}
 					}
@@ -194,7 +191,7 @@ public class Server {
 			return false;
 		int size = OnlUser.size();
 		for (int i = 0; i < size; i++) {
-			Users peer = OnlUser.get(i);
+			User peer = OnlUser.get(i);
 			if (peer.getUsername().equals(username)) {
 				return true;
 			}
@@ -204,11 +201,12 @@ public class Server {
 
 	// save name user
 	private void newUserPeer(String username, String ipAddress, int port) throws Exception {
-		Users newPeer = new Users();
+		//User newPeer = new User();
 		if (OnlUser.size() == 0)
-			OnlUser = new ArrayList<Users>();
-		newPeer.setUserPeer(username, ipAddress.substring(1), port);
-		OnlUser.add(newPeer);
+			OnlUser = new ArrayList<User>();
+		//newPeer.setUserPeer(username, ipAddress.substring(1), port);
+		//OnlUser.add(newPeer);
+		OnlUser.add(new User(username, ipAddress.substring(1), port));
 	}
 
 	// show status server
@@ -216,10 +214,10 @@ public class Server {
 		String msg = "";
 		int size = OnlUser.size();
 		for (int i = 0; i < size; i++) {
-			Users peer = OnlUser.get(i);
+			User peer = OnlUser.get(i);
 			msg += peer.getUsername();
 			msg += " ";
-			msg += peer.getIPaddress();
+			msg += peer.getIP();
 			msg += " ";
 			msg += peer.getPort();
 			msg += " ";
