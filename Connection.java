@@ -9,6 +9,7 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -132,11 +133,34 @@ public class Connection implements Runnable {
     }
     
     public void sendFile(File file) {
+        sendMessage("file " + file.getName());
+
+        try {
+            int totalBytes = 0;
+            int count = 0;
+            int bytesRead = 0;
+            byte[] data = new byte[8192];
+            DataInputStream input =
+                new DataInputStream(
+                    new BufferedInputStream(
+                        new FileInputStream(file)));
         
-    }
-    
-    public void receiveFile(File file) {
-        
+            bytesRead = input.read(data, 0, 8192);
+            while (bytesRead >= 0) {
+                count++;
+                totalBytes += bytesRead;
+                System.out.printf("Sending packet %d [%d bytes]...\n", count, bytesRead);
+                output.write(data, 0, bytesRead);
+                output.flush();
+                bytesRead = input.read(data, 0, 8192);
+            }
+
+            input.close();
+
+            System.out.printf("Done sending file [Total: %d bytes]\n", totalBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
     public void sendFriendRequest() {

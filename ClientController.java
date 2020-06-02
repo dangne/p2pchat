@@ -152,6 +152,7 @@ public class ClientController {
     
     public void sendFile(String receiver, File file) {
         System.out.println("Sending " + file.getAbsolutePath() + "...");
+        findConnection(receiver).sendFile(file);
     }
     
     public void sendFriendRequest(String receiver) {

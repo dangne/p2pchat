@@ -5,8 +5,11 @@
  */
 //package com.hcmut.demo;
 
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.net.Socket;
@@ -55,12 +58,48 @@ public class InputHandler implements Runnable {
                 connection.receiveUnfriend();
                 break;
             }
+            case "file": {
+                try {
+                    int totalBytes = 0;
+                    int count = 0;
+                    int bytesRead = 0;
+                    byte[] data = new byte[8192];
+                    DataOutputStream output =
+                        new DataOutputStream(
+                            new BufferedOutputStream(
+                                new FileOutputStream("from_" + connection.getUsername() + "_" + parts[1])));
+                
+                    System.out.println("Receiving " + parts[1] + "...");
+
+                    bytesRead = input.read(data, 0, 8192);
+                    while (bytesRead >= 0) {
+                        count++;
+                        totalBytes += bytesRead;
+                        System.out.printf("Writing packet %d [%d bytes]...\n", count, bytesRead);
+                        output.write(data, 0, bytesRead);
+                        output.flush();
+                        if (bytesRead < 8192) {
+                            System.out.printf("Done receiving file %s [Total: %d bytes]\n", parts[1], totalBytes);
+                            break;
+                        }
+                        bytesRead = input.read(data, 0, 8192);
+                    }
+                
+                    output.close();
+
+                    break;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             // For server connection
             case "invalid": {
-                break;}
+                break;
+            }
             default: {
                 connection.sendMessage("invalid");
-                break;}
+                break;
+            }
         }
     }
 
@@ -70,7 +109,6 @@ public class InputHandler implements Runnable {
             while (true) {
                 String message = input.readUTF();
                 System.out.println("Received message from " + connection.getUsername() + ": " + message);
-//                connection.log(message);
                 parseMessage(message);
             }
         } catch (EOFException eof) {
