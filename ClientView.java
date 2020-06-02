@@ -8,6 +8,7 @@
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.awt.Font;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 
 /**
@@ -66,6 +67,7 @@ public class ClientView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+		chatTextArea.setFont(new Font("Lucida Grande", Font.PLAIN, MEDIUM_FONT));
         chatTextArea.setEditable(false);
         chatTextArea.setColumns(20);
         chatTextArea.setRows(5);
@@ -86,6 +88,7 @@ public class ClientView extends javax.swing.JFrame {
         statusLabel.setIcon(new javax.swing.ImageIcon("./assets/on.png")); // NOI18N
         statusLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
+		nameLabel.setFont(new Font("Lucida Grande", Font.BOLD, LARGE_FONT));
         nameLabel.setText("Minh Dang");
 
         friendButton.setIcon(new javax.swing.ImageIcon("./assets/add_friend.png")); // NOI18N
@@ -127,6 +130,7 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
+		messageTextField.setFont(new Font("Lucida Grande", Font.PLAIN, SMALL_FONT));
         messageTextField.setText("Say something...");
         messageTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -166,6 +170,7 @@ public class ClientView extends javax.swing.JFrame {
             }
         });
 
+		friendList.setFont(new Font("Lucida Grande", Font.PLAIN, MEDIUM_FONT));
         friendList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 friendListMouseReleased(evt);
@@ -175,6 +180,7 @@ public class ClientView extends javax.swing.JFrame {
 
         userTabbedPane.addTab("Friends", friendListScroll);
 
+		strangerList.setFont(new Font("Lucida Grande", Font.PLAIN, MEDIUM_FONT));
         strangerList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 strangerListMouseReleased(evt);
@@ -242,6 +248,7 @@ public class ClientView extends javax.swing.JFrame {
         String messageText = messageTextField.getText();
         if (selectedUser != null && enableSendMessage) {
             if (evt.getKeyCode() == KeyEvent.VK_ENTER && !messageText.equals(DEFAULT_MESSAGE_TEXT)) {
+                messageTextField.setText(DEFAULT_MESSAGE_TEXT);
                 clientController.sendMessage(selectedUser, messageText);
             }
         }
@@ -251,6 +258,7 @@ public class ClientView extends javax.swing.JFrame {
         String messageText = messageTextField.getText();
         if (selectedUser != null && enableSendMessage) {
             if (isLeftMouseButton(evt) && !messageText.equals(DEFAULT_MESSAGE_TEXT)) {
+                messageTextField.setText(DEFAULT_MESSAGE_TEXT);
                 clientController.sendMessage(selectedUser, messageText);
             }
         }
@@ -359,11 +367,12 @@ public class ClientView extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {            
-        /* Set the Nimbus look and feel */
+        /*
+        * Set the Nimbus look and feel *
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        * If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+         *
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -383,15 +392,20 @@ public class ClientView extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        * Create and display the form *
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ClientView(new ClientController()).setVisible(true);
             }
         });
+        */
+        new ClientView(new ClientController()).setVisible(true);
     }
 
     // Personal variables declaration
+    private final int LARGE_FONT = 20;
+    private final int MEDIUM_FONT = 17;
+    private final int SMALL_FONT = 15;
     private final int FRIENDS_TAB = 0;
     private final int STRANGERS_TAB = 1;
     private final String DEFAULT_MESSAGE_TEXT = "Say something...";

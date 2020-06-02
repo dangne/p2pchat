@@ -133,6 +133,7 @@ public class Connection implements Runnable {
     }
     
     public void sendFile(File file) {
+        appendChatData("You sent " + username + " a file: " + file.getName());
         sendMessage("file " + file.getName());
 
         try {
