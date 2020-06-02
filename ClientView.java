@@ -20,8 +20,8 @@ public class ClientView extends javax.swing.JFrame {
      * Creates new form ClientView
      */
     public ClientView(ClientController clientController) {
-        ADD_FRIEND_ICON = new javax.swing.ImageIcon("/home/dang/Pictures/add_friend.png");
-        REMOVE_FRIEND_ICON = new javax.swing.ImageIcon("/home/dang/Pictures/remove_friend.png");
+        ADD_FRIEND_ICON = new javax.swing.ImageIcon("./assets/add_friend.png");
+        REMOVE_FRIEND_ICON = new javax.swing.ImageIcon("./assets/remove_friend.png");
         
         this.clientController = clientController;
         previousFindText = "";
@@ -83,12 +83,12 @@ public class ClientView extends javax.swing.JFrame {
         );
 
         statusLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        statusLabel.setIcon(new javax.swing.ImageIcon("/home/dang/Pictures/on.png")); // NOI18N
+        statusLabel.setIcon(new javax.swing.ImageIcon("./assets/on.png")); // NOI18N
         statusLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         nameLabel.setText("Minh Dang");
 
-        friendButton.setIcon(new javax.swing.ImageIcon("/home/dang/Pictures/add_friend.png")); // NOI18N
+        friendButton.setIcon(new javax.swing.ImageIcon("./assets/add_friend.png")); // NOI18N
         friendButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 friendButtonMouseClicked(evt);
