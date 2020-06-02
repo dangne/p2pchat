@@ -17,8 +17,6 @@ import java.util.Scanner;
  * @author dang
  */
 public class ClientController {
-    //private final String SERVER_IP = "35.186.152.171";
-    //private final int SERVER_PORT = 3000;
     private final int FRIEND = 0;
     private final int STRANGER = 1;
     private final int SENT = 2;

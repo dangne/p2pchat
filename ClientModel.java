@@ -41,18 +41,19 @@ public class ClientModel {
         this.IP = getLocalAddress();
         this.port = port;
         
-        FILE_PATH = "FriendsListOf" + username + ".xml";
+        FILE_PATH = "./" + this.username + "'s files/FriendsList.xml";
         
         friendsList = new ArrayList<User>();
         
         // Check if a friend list exist
         File file = new File(FILE_PATH);
-        
+
         if (file.exists() && !file.isDirectory()) {
             System.out.println("FriendsList exist!");
             readFriendsList();
         } else {
             System.out.println("FriendsList not exist!");
+            file.getParentFile().mkdirs();
             createFriendsList();
         }
     }

@@ -9,7 +9,9 @@ import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.UTFDataFormatException;
 import java.io.IOException;
 
 import java.net.Socket;
@@ -59,7 +61,12 @@ public class InputHandler implements Runnable {
                 break;
             }
             case "file": {
+                connection.appendChatData(connection.getUsername() + " sent you a file: " + parts[1]);
                 try {
+                    // Check if user's folder exist. If not, create new one
+                    String folderPath = "./" + controller.getUsername() + "'s files/";
+                    new File(folderPath).mkdir();
+
                     int totalBytes = 0;
                     int count = 0;
                     int bytesRead = 0;
@@ -67,7 +74,7 @@ public class InputHandler implements Runnable {
                     DataOutputStream output =
                         new DataOutputStream(
                             new BufferedOutputStream(
-                                new FileOutputStream("from_" + connection.getUsername() + "_" + parts[1])));
+                                new FileOutputStream(folderPath + parts[1])));
                 
                     System.out.println("Receiving " + parts[1] + "...");
 
@@ -111,6 +118,9 @@ public class InputHandler implements Runnable {
                 System.out.println("Received message from " + connection.getUsername() + ": " + message);
                 parseMessage(message);
             }
+        } catch (UTFDataFormatException udfe) {
+            System.out.println("File corrupted!");
+            
         } catch (EOFException eof) {
             System.out.println("Connection to " + connection.getUsername() + " closed");
             
